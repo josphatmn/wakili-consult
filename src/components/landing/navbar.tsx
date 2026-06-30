@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Scale } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/ui/logo"
 import { cn } from "@/lib/utils"
 
 const NAV_ITEMS = [
@@ -39,12 +40,7 @@ export function Navbar() {
         "mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-500",
         scrolled ? "py-3" : "py-5"
       )}>
-        <a href="/" className="flex items-center gap-2 text-xl font-bold shrink-0">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
-            <Scale className="h-4 w-4 text-white" />
-          </div>
-          <span className="bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">M-Wakili AI</span>
-        </a>
+        <Logo size="md" />
 
         <div className="hidden lg:flex items-center gap-8">
           {NAV_ITEMS.map((item) => (

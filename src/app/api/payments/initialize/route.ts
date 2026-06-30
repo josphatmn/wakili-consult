@@ -7,6 +7,8 @@ const PLAN_PRICES: Record<string, number> = {
   business: 499900,
 }
 
+const CALLBACK_URL = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard/billing/callback`
+
 export async function POST(req: Request) {
   try {
     const user = await getCurrentUser()
@@ -24,7 +26,7 @@ export async function POST(req: Request) {
     const result = await initializePayment(user.email!, amount, {
       userId: user.id,
       plan,
-    })
+    }, CALLBACK_URL)
 
     if (result.status && result.data) {
       return NextResponse.json({ url: result.data.authorization_url })

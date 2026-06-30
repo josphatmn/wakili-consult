@@ -2,46 +2,36 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  Search, MessageSquare, FileText, FileSearch,
-  BookOpen, CreditCard, Settings, Users, ChevronLeft,
-  ChevronRight, LayoutDashboard, LogOut, Menu, Briefcase,
+  LayoutDashboard, Users, CreditCard, Activity, Shield,
+  ChevronLeft, ChevronRight, LogOut, Menu, ArrowLeft,
 } from "lucide-react"
 import { DashboardLogo } from "@/components/ui/logo"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Research", href: "/dashboard/research", icon: Search },
-  { label: "AI Chat", href: "/dashboard/chat", icon: MessageSquare },
-  { label: "Documents", href: "/dashboard/documents", icon: FileText },
-  { label: "Contracts", href: "/dashboard/contracts", icon: FileSearch },
-  { label: "Clients", href: "/clients", icon: Users },
-  { label: "Case Spaces", href: "/casespaces", icon: Briefcase },
-  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+const ADMIN_NAV = [
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Users", href: "/admin/users", icon: Users },
+  { label: "Payments", href: "/admin/payments", icon: CreditCard },
+  { label: "System", href: "/admin/system", icon: Activity },
 ]
 
-export function Sidebar() {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
 
   async function handleLogout() {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" })
-      window.location.href = "/login"
-    } catch {
-      window.location.href = "/login"
-    }
+    await fetch("/api/auth/logout", { method: "POST" })
+    router.push("/login")
   }
 
   return (
-    <>
-      <div
+    <div className="min-h-screen">
+      <aside
         className={cn(
           "hidden lg:flex flex-col fixed left-0 top-0 bottom-0 z-30 border-r bg-sidebar transition-all duration-300",
           collapsed ? "w-16" : "w-64"
@@ -53,8 +43,18 @@ export function Sidebar() {
 
         <Separator />
 
+        <div className="px-3 pt-3">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:bg-sidebar-accent transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            {!collapsed && <span>Back to Dashboard</span>}
+          </Link>
+        </div>
+
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto scrollbar-hide">
-          {NAV_ITEMS.map((item) => {
+          {ADMIN_NAV.map((item) => {
             const isActive = pathname === item.href
             return (
               <Link
@@ -76,7 +76,7 @@ export function Sidebar() {
 
         <Separator />
 
-        <div className="p-3">
+        <div className="p-3 space-y-1">
           <button
             onClick={handleLogout}
             className={cn(
@@ -95,15 +95,20 @@ export function Sidebar() {
         >
           {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
         </button>
-      </div>
+      </aside>
 
-      <MobileSidebar pathname={pathname} />
-    </>
+      <MobileAdminNav pathname={pathname} />
+
+      <main className="lg:pl-64 transition-all duration-300">
+        <div className="p-6 lg:p-8 pt-16 lg:pt-8">{children}</div>
+      </main>
+    </div>
   )
 }
 
-function MobileSidebar({ pathname }: { pathname: string }) {
+function MobileAdminNav({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <>
@@ -136,8 +141,16 @@ function MobileSidebar({ pathname }: { pathname: string }) {
                   <ChevronLeft className="h-5 w-5" />
                 </button>
               </div>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:bg-sidebar-accent transition-colors mb-3"
+                onClick={() => setOpen(false)}
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Back to Dashboard</span>
+              </Link>
               <nav className="space-y-1">
-                {NAV_ITEMS.map((item) => {
+                {ADMIN_NAV.map((item) => {
                   const isActive = pathname === item.href
                   return (
                     <Link

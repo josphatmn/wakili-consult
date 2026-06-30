@@ -2,7 +2,8 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Scale, Mail, Phone, MapPin, Twitter, Github, Linkedin } from "lucide-react"
+import { Mail, Phone, MapPin, Twitter, Github, Linkedin } from "lucide-react"
+import { Logo } from "@/components/ui/logo"
 import { SITE_CONFIG } from "@/lib/constants"
 
 const footerLinks = {
@@ -46,12 +47,7 @@ export function Footer() {
             transition={{ duration: 0.5 }}
             className="col-span-2 md:col-span-3 lg:col-span-2"
           >
-            <a href="/" className="flex items-center gap-2 text-xl font-bold mb-4">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-purple-600 flex items-center justify-center">
-                <Scale className="h-4 w-4 text-white" />
-              </div>
-              <span className="bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">M-Wakili AI</span>
-            </a>
+            <Logo size="md" className="mb-4" />
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-6">
               Your full-time AI Kenyan lawyer. Specialised AI agents trained on Kenyan law to help you research, draft, analyze, and solve legal problems faster.
             </p>

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono, Roboto } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
-import { SITE_CONFIG } from "@/lib/constants"
+import { defaultMetadata } from "@/lib/seo"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,27 +20,7 @@ const roboto = Roboto({
   weight: ["400", "500", "700", "900"],
 })
 
-export const metadata: Metadata = {
-  title: {
-    default: `${SITE_CONFIG.name} - ${SITE_CONFIG.tagline}`,
-    template: `%s | ${SITE_CONFIG.name}`,
-  },
-  description: SITE_CONFIG.description,
-  keywords: ["Kenyan law", "AI lawyer", "legal AI", "Kenya legal research", "AI legal assistant"],
-  openGraph: {
-    title: `${SITE_CONFIG.name} - ${SITE_CONFIG.tagline}`,
-    description: SITE_CONFIG.description,
-    url: SITE_CONFIG.url,
-    siteName: SITE_CONFIG.name,
-    locale: "en_KE",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${SITE_CONFIG.name} - ${SITE_CONFIG.tagline}`,
-    description: SITE_CONFIG.description,
-  },
-}
+export const metadata: Metadata = defaultMetadata
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

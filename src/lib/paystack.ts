@@ -19,13 +19,19 @@ async function paystackRequest(endpoint: string, options: RequestInit = {}) {
   return response.json() as Promise<PaystackResponse>
 }
 
-export async function initializePayment(email: string, amount: number, metadata?: Record<string, any>) {
+export async function initializePayment(
+  email: string,
+  amount: number,
+  metadata?: Record<string, any>,
+  callbackUrl?: string
+) {
   return paystackRequest("/transaction/initialize", {
     method: "POST",
     body: JSON.stringify({
       email,
       amount,
       currency: "KES",
+      callback_url: callbackUrl,
       metadata,
     }),
   })
